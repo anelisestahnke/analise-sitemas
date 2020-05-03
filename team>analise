@@ -1,0 +1,291 @@
+#include<conio.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<iostream>
+#include<ctype.h>
+#include<io.h>
+#include<string.h>
+#include<dos.h>
+
+void menuprincipal();
+
+using namespace std; 
+
+//declaracao de variaveis
+struct clientes
+    {
+    int codigo;
+    char nome[20]; 
+    char Endereco[50];
+    int fone;
+    char email[30]; 
+    
+    }Cliente;
+	          
+struct fornecedores 
+    {
+    int codigo;
+    char nomefornecedor[30];
+    char Enderecofornecedor[50];
+    int fonefornecedor;
+    char emailfornecedor[30];      
+    }Fornecedor;   
+       
+      
+FILE *fClientes;
+FILE *fFornecedores;
+   char op; 
+   int tam,opc; 
+
+void cria_fClientes(){
+if((fClientes=fopen("Cliente.dat","a"))==NULL){
+system("cls");
+printf("Erro de criacao de arquivo");
+return;
+ }
+printf("\n Arquivo Cliente Criado \n");
+fclose(fClientes);
+}
+
+void cria_fFornecedores(){
+if((fFornecedores=fopen("Fornecedor.dat","a"))==NULL){
+system("cls");
+printf("Erro de criacao de arquivo");
+return;
+ }
+printf("\n Arquivo Fornecedor Criado\n ");
+fclose(fFornecedores);
+}
+
+void cadastraClientes()
+{
+  system("cls");
+  int tamanho=0;
+  fClientes = fopen("Cliente.dat","r+");
+  rewind(fClientes);
+  do{
+  fread(&Cliente,sizeof(Cliente),1,fClientes);
+  tamanho++;}
+  while(!feof(fClientes));
+
+  fseek(fClientes,sizeof(Cliente),tamanho);
+  do
+  {
+    system("cls");
+    printf("\nDigite o código do Cliente:");
+    cin>>Cliente.codigo;
+    printf("\nDigite o nome do Cliente:");
+    cin>>Cliente.nome;
+    printf("\nDigite o endereco do Cliente:");
+    cin>>Cliente.Endereco;
+    printf("\nDigite o fone do Cliente:");
+    cin>>Cliente.fone;
+    printf("\nDigite o e-mail do Cliente:");
+    cin>>Cliente.email;
+    tamanho=tamanho+fwrite(&Cliente,sizeof(struct clientes),1,fClientes);
+    printf("\nContinuar cadastrando<s> ou <n>:");
+    cin>>op;
+    op = toupper(op);
+    }while (op=='S');
+    fclose(fClientes);
+}
+
+void cadastraFornecedores()
+{
+  system("cls");
+  int tamanho=0;
+  fFornecedores = fopen("Fornecedor.dat","r+");
+  rewind(fFornecedores);
+  do{
+  fread(&Fornecedor,sizeof(Fornecedor),1,fFornecedores);
+  tamanho++;}
+  while(!feof(fFornecedores));
+
+  fseek(fFornecedores,sizeof(Fornecedor),tamanho);
+  do
+  {
+    system("cls");
+    printf("\nDigite o codigo do Fornecedor:");
+    cin>>Fornecedor.codigo;
+    printf("\nDigite o nome do Fornecedor:");
+    cin>>Fornecedor.nomefornecedor;
+    printf("\nDigite o endereco do Fornecedor:");
+    cin>>Fornecedor.Enderecofornecedor;
+    printf("\nDigite o fone do Fornecedor:");
+    cin>>Fornecedor.fonefornecedor;
+    printf("\nDigite o e-mail do Fornecedor:");
+    cin>>Fornecedor.emailfornecedor;
+    tamanho=tamanho+fwrite(&Fornecedor,sizeof(struct fornecedores),1,fFornecedores);
+    printf("\nContinuar cadastrando<s> ou <n>:");
+    cin>>op;
+    op = toupper(op);
+    }while (op=='S');
+    fclose(fFornecedores);
+}
+
+void consulta()
+{
+    system("cls");
+    fClientes=fopen("Cliente.dat","r+");
+    fseek(fClientes,sizeof(struct clientes),0);
+    while(fread(&Cliente,sizeof(Cliente),1,fClientes)==1)
+    {
+system("cls");
+    printf("\n codigo do Cliente:  %d",Cliente.codigo );
+    printf("\n nome do Cliente:   %s",Cliente.nome);
+    printf("\n Endereco:   %s",Cliente.Endereco);
+    printf("\n Fone do Cliente:  %i",Cliente.fone);
+    printf("\n e-mail do Cliente:   %s",Cliente.email);
+    getch();
+    }
+    printf("fim do arquivo");
+    fclose(fClientes);
+    getch();
+}
+
+void consulta_fornecedor()
+{
+    system("cls");
+    fFornecedores=fopen("Fornecedor.dat","r+");
+    fseek(fFornecedores,sizeof(struct fornecedores),0);
+    while(fread(&Fornecedor,sizeof(Fornecedor),1,fFornecedores)==1)
+    {
+system("cls");
+    printf("\n Codigo do Fornecedor:  %d",Fornecedor.codigo);
+    printf("\n nome do Fornecedores:   %s",Fornecedor.nomefornecedor);
+    printf("\n Endereco:   %s",Fornecedor.Enderecofornecedor);
+    printf("\n Fone do Fornecedor:  %i",Fornecedor.fonefornecedor);
+    printf("\n e-mail do Fornecedor   %s",Fornecedor.emailfornecedor);
+    getch();
+    }
+    printf("fim do arquivo");
+    fclose(fFornecedores);
+    getch();
+}
+
+void consulta_nome(){
+    char nom_cliente[20];
+    int achou,
+    cont=0;
+system("cls");
+fClientes=fopen("Cliente.dat","r+");
+fseek(fClientes,sizeof(struct clientes),0);
+printf("Digite o Nome p/ Procura : ");
+cin>> nom_cliente;
+    while(fread(&Cliente,sizeof(Cliente),1,fClientes)==1){
+achou=strcmp(Cliente.nome,nom_cliente);
+if(achou==0){
+  printf("\n Codigo do Cliente:  %d",Cliente.codigo );
+  printf("\n nome do Cliente:   %s",Cliente.nome);
+  printf("\n Endereco:   %s",Cliente.Endereco);
+  printf("\n Fone do Cliente:  %i",Cliente.fone);
+  printf("\n e-mail do Cliente:   %s",Cliente.email);
+  printf("_____________________________________________\n");
+  getch();
+  cont=1;}}
+
+if(cont==0){
+   printf("Nome nao Cadastrado\n");
+   printf("\nCadastrar Cliente<s> ou <n>:");
+   cin>>op;
+   op = toupper(op);
+   if (op=='S'){
+   cadastraClientes();
+   getch();}}}
+
+
+void consulta_nomefornecedor(){
+     char nomefornecedor[20];
+     int achou,
+cont=0;
+system("cls");
+fFornecedores=fopen("Fornecedor.dat","r+");
+fseek(fFornecedores,sizeof(struct fornecedores),0);
+printf("Digite o Nome p/ Procura : ");
+cin>> nomefornecedor;
+    while(fread(&Fornecedor,sizeof(Fornecedor),1,fFornecedores)==1){
+achou=strcmp(Fornecedor.nomefornecedor,nomefornecedor);
+if(achou==0){
+    printf("\n Codigo do Fornecedor:  %d",Fornecedor.codigo );
+    printf("\n nome do Fornecedor:   %s",Fornecedor.nomefornecedor);
+    printf("\n Endereco:   %s",Fornecedor.Enderecofornecedor);
+    printf("\n Fone do Fornecedor:  %i",Fornecedor.fonefornecedor);
+    printf("\n e-mail do Fornecedor:   %s",Fornecedor.emailfornecedor);
+  printf("_____________________________________________\n");
+  getch();
+  cont=1;}}
+
+if(cont==0){
+   printf("Nome nao Cadastrado\n");
+   printf("\nCadastrar Fornecedores<s> ou <n>:");
+   cin>>op;
+   op = toupper(op);
+   if (op=='S'){
+   cadastraFornecedores();
+   getch();}}}
+
+
+
+
+void menu()
+{
+  system("cls");
+  printf("Menu de opcoes (Clientes)");
+  printf("\n");
+  printf("1 - Cadastrar\n");
+  printf("2 - Consultar Por Nome\n");
+  printf("3 - voltar menu principal\n");
+  printf("Digite uma opcao\n");
+  cin>>opc;
+  switch(opc)
+  {
+  case 1:cadastraClientes();break;
+  case 2:consulta();break;
+  case 3:menuprincipal();
+  }
+}
+
+void menu_fornecedor()
+{
+  system("cls");
+  printf("Menu de opcoes (Fornecedores)");
+  printf("\n");
+  printf("1 - Cadastrar\n");
+  printf("2 - Consultar Por Nome\n");
+  printf("3 - Voltar menu principal\n");
+  printf("Digite uma opcao\n");
+  cin>>opc;
+  switch(opc)
+  {
+  case 1:cadastraFornecedores();break;
+  case 2:consulta_fornecedor();break;
+  case 3:menuprincipal();
+  }
+}
+
+void menuprincipal(){
+
+system("cls");
+cria_fClientes();
+cria_fFornecedores();
+printf("\n\n\n");
+ do
+  {
+  printf("\n 1 - Menu Clientes");
+  printf("\n 2 - Menu Fornecedores\n");
+  printf("\n 3 - Sair\n");
+  printf("Digite uma opcao\n");
+  cin>>opc;
+  switch(opc)
+  {
+  case 1:menu();break;
+  case 2:menu_fornecedor();break;
+  case 3:exit(0);
+  }}
+  while (op!=3);
+}
+
+main(){
+system("cls");
+menuprincipal();
+}
